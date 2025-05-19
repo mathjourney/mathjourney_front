@@ -1,0 +1,30 @@
+export const Colors = {
+  black: '#000000',
+  white: '#ffffff',
+  primary: '#8b5cf6',
+  accent: '#fb923c',
+  success: '#22c55e',
+  danger: '#ef4444',
+  lightBlue: '#f0f4ff', // או כל צבע שתרצי
+  background: '#f8f6ff',
+  light: '#ede9fe',
+  lightPurple:'#c4b5fd',
+  triteWhite: '#e3e7f4',
+  secondary: '#7c3aed',
+  darkYellow: '#FACC15',
+  freckleOrange:'#FB923C',
+  grayish: '#f1f5f9',
+  coolGray:'#8F9CB3',
+  dodgerBlue:'#2196F3',
+  darkerDodgerBlue:'#2563EB',
+  green: '#4CAF50',
+  grassGreen:'#28a745',
+  darkGray:'#555',
+  majorelleBlue:'#4F46E5',
+  lilac: '#A47DAB',
+  aeroBlue:'#d4edda',
+palePink:'#f8d7da',
+  redish:'#dc3545',
+
+  // שימי מה שבא לך כאן
+};
