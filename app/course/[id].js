@@ -391,12 +391,14 @@ ${sign}   ${second}
     const isVisual = myTopicLevel <= 2;
 
     function decodeFraction(encoded) {
+        if (encoded < 1000) return encoded.toString(); // אם זה מספר רגיל, לא שבר
         const num = Math.floor(encoded / 1000);
         const den = encoded % 1000;
         if (den === 0) return '∞';
         if (num % den === 0) return `${num / den}`;
         return `${num}/${den}`;
     }
+
 
 
     function generateQuestionText(first, second, sign, topicLevel) {
