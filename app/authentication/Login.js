@@ -75,10 +75,27 @@ export default function Login() {
             } else {
                 setErrors((e) => ({ ...e, form: data.message || 'שגיאה בהתחברות' }));
             }
-        } catch (err) {
-            console.error('login error', err);
+        }
+
+        catch (err) {
+        console.error('login error', err);
+
+        if (err.response && err.response.data && err.response.data.message) {
+            setErrors((e) => ({ ...e, form: err.response.data.message }));
+        } else if (err.response && err.response.status === 404) {
+            setErrors((e) => ({ ...e, form: 'אימייל לא קיים במערכת' }));
+        } else if (err.response && err.response.status === 401) {
+            setErrors((e) => ({ ...e, form: 'סיסמה שגויה' }));
+        } else {
             setErrors((e) => ({ ...e, form: 'שגיאה כללית בשרת' }));
         }
+    }
+
+
+
+
+
+
     };
 
     /* ──────────────── UI ──────────────── */
