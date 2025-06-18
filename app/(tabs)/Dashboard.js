@@ -122,7 +122,7 @@ export default function Dashboard() {
                     <Text
                         style={[dashboardStyles.gradientTitle, { writingDirection: 'rtl' }]}
                     >
-                        {username},  ברוך הבא ל־MathJourney!
+                        {username},  ברוך הבא ל־MathJourney!נעמה
                     </Text>
                 </LinearGradient>
                 <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
