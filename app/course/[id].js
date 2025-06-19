@@ -57,7 +57,8 @@ export default function StyledCoursePage() {
     const [detailedSolutions, setDetailedSolutions] = useState(true);
     const successAnim = useRef(new Animated.Value(0)).current;
     const [showSuccessIcon, setShowSuccessIcon] = useState(false);
-
+    const [showLevelDownModal, setShowLevelDownModal] = useState(false);
+    const [levelChangeText, setLevelChangeText] = useState('');
 
 
     useEffect(() => {
@@ -216,21 +217,29 @@ export default function StyledCoursePage() {
 
             if (correct) {
                 setAnswerFeedbackColor("green");
-                setResponseMessage(`תשובה נכונה! רמה נוכחית: ${res.data.currentLevel}`);
-                if (res.data.levelUpMessage) {
-                    setResponseMessage(`תשובה נכונה! ${res.data.levelUpMessage}`);
+                if (res.data.levelChangeMessage) {
+                    setResponseMessage(`תשובה נכונה! ${res.data.levelChangeMessage}`);
+                    setLevelChangeText(res.data.levelChangeMessage);
                     setShowLevelUpModal(true);
                     setShowConfetti(true);
-                }
-                else {
-                    triggerSuccessAnimation(); // תשובה נכונה רגילה => אנימציה חדשה
+                } else {
+                    setResponseMessage(`תשובה נכונה! רמה נוכחית: ${res.data.currentLevel}`);
+                    triggerSuccessAnimation();
                 }
             } else {
                 setAnswerFeedbackColor("red");
                 Vibration.vibrate(200);
-                setResponseMessage(`תשובה שגויה! התשובה הנכונה היא ${correctDisplay}`);
-            }
+                if (res.data.levelChangeMessage) {
+                    setResponseMessage(res.data.levelChangeMessage);
+                    setLevelChangeText(res.data.levelChangeMessage);
 
+                    if (res.data.levelChangeMessage.includes("ירדת") || res.data.levelChangeMessage.includes("עדיין ברמה")) {
+                        setShowLevelDownModal(true);
+                    }
+                } else {
+                    setResponseMessage(`תשובה שגויה! התשובה הנכונה היא ${correctDisplay}`);
+                }
+            }
 
             setHistory((prev) => [
                 ...prev,
@@ -613,8 +622,20 @@ ${sign}   ${second}
                     <View style={exercisePageStyles.modalOverlay}>
                         <View style={exercisePageStyles.modalBox}>
                             <Text style={exercisePageStyles.modalTitle}>כל הכבוד!</Text>
-                            <Text style={exercisePageStyles.modalText}>עלית רמה!</Text>
+                            <Text style={exercisePageStyles.modalText}>{levelChangeText}</Text>
                             <Pressable onPress={() => setShowLevelUpModal(false)} style={exercisePageStyles.closeButton}>
+                                <Text style={exercisePageStyles.closeButtonText}>סגור</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal visible={showLevelDownModal} transparent animationType="slide">
+                    <View style={exercisePageStyles.modalOverlay}>
+                        <View style={exercisePageStyles.modalBox}>
+                            <Text style={exercisePageStyles.modalTitle}>לא נורא!</Text>
+                            <Text style={exercisePageStyles.modalText}>{levelChangeText}</Text>
+                            <Pressable onPress={() => setShowLevelDownModal(false)} style={exercisePageStyles.closeButton}>
                                 <Text style={exercisePageStyles.closeButtonText}>סגור</Text>
                             </Pressable>
                         </View>
