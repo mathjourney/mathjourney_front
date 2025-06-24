@@ -599,7 +599,7 @@ const dashboardStyles = StyleSheet.create({
         backgroundColor: Colors.light,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 12,
+        marginBottom: 3,
     },
     titleWrapper: {
         height: hp(9),
@@ -663,7 +663,7 @@ const dashboardStyles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 24,
-        marginTop: 8,
+        marginTop: -3,
         alignSelf: 'stretch',
         alignItems: 'center',
     },

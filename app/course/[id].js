@@ -87,6 +87,10 @@ export default function StyledCoursePage() {
 
     async function fetchTopicLevel(topicId) {
         try {
+            if (!topicId || topicId <= 0) {
+                alert("נושא לא תקין");
+                return;
+            }
             const res = await api.get("/api/user/topics-levels");   // עכשיו ילך לבק-אנד בענן
 
             if (res.data.success) {
@@ -101,6 +105,10 @@ export default function StyledCoursePage() {
     async function fetchNextQuestion(topicId) {
         console.time("⏱️ fetchNextQuestion");
         try {
+            if (!topicId || topicId <= 0) {
+                alert("נושא לא תקין");
+                return;
+            }
             console.log("📤 שולחת בקשה לשרת עם topicId =", topicId);
             const res = await api.get(`/api/exercises/next?topicId=${topicId}`);
             console.log("📥 קיבלתי תשובה:", res.data);
@@ -141,6 +149,10 @@ export default function StyledCoursePage() {
 
     async function fetchRandomQuestion() {
         try {
+            if (!topicId || topicId <= 0) {
+                alert("נושא לא תקין");
+                return;
+            }
             const res = await api.get(`/api/exercises/next-random`);
 
             const questionData = res.data;
@@ -199,6 +211,11 @@ export default function StyledCoursePage() {
 
 
         try {
+            if (!topicId || topicId <= 0) {
+                alert("נושא לא תקין");
+                return;
+            }
+
             const userAnswerValue = question.answers[selectedAnswer];
             const res = await api.post("/api/exercises/answer", {
                 answer: userAnswerValue,
