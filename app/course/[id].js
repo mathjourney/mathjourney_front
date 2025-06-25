@@ -32,7 +32,7 @@ const FractionInQuestionTitle = ({ numerator, denominator }) => (
 
 /* ───────────── הקומפוננטה הראשית ───────────── */
 export default function StyledCoursePage() {
-    const { id } = useLocalSearchParams();          // id == topicId או 'random'
+    const { id } = useLocalSearchParams();   // id == topicId או 'random'
     const router  = useRouter();
 
     /* --- state ---- */
@@ -147,15 +147,12 @@ export default function StyledCoursePage() {
         setIsCheckDisabled(true);
 
         try {
-            const topicId = question.topicId;   // מגיע מהשרת
             const userAnswerValue = question.answers[selectedAnswer];
-
             const res = await api.post("/api/exercises/answer", {
                 answer:   userAnswerValue,
-                question: question
+                question
             });
 
-            /* תוצאות */
             setShowResult(true);
 
             const { isCorrect, correctAnswer, currentLevel, levelChangeMessage } = res.data;
@@ -189,7 +186,6 @@ export default function StyledCoursePage() {
                 }
             }
 
-            /* היסטוריה */
             setHistory(prev => [
                 ...prev,
                 {
@@ -204,9 +200,8 @@ export default function StyledCoursePage() {
         }
     }
 
-    /* ───────────── עזרי תצוגה ו-UI ───────────── */
-    const convertSign = sign =>
-        ({ "+": "+", "-": "-", "×": "×", "÷": "÷" }[sign] ?? sign);
+    /* ───────────── עזרי תצוגה ───────────── */
+    const convertSign = sign => ({ "+": "+", "-": "-", "×": "×", "÷": "÷" }[sign] ?? sign);
 
     const decodeFraction = encoded => {
         if (encoded < 1000) return encoded.toString();
@@ -216,12 +211,8 @@ export default function StyledCoursePage() {
         return num % den === 0 ? `${num / den}` : `${num}/${den}`;
     };
 
-    function generateQuestionText(first, second, sign /*, topicLevel*/) {
+    function generateQuestionText(first, second, sign) {
         const op = convertSign(sign);
-        const names = ["נועה", "מיטל", "תמר", "הדס", "נעמה"];
-        const items = ["תפוחים", "בננות", "עפרונות", "כדורים", "ספרים", "צעצועים"];
-        const name  = names[Math.floor(Math.random() * names.length)];
-        const item  = items[Math.floor(Math.random() * items.length)];
         const generic = [
             `כמה זה ${second} ${op} ${first}?`,
             `${second} ${op} ${first} שווה ל...?`
@@ -237,13 +228,90 @@ export default function StyledCoursePage() {
         ]).start(() => setShowSuccessIcon(false));
     }
 
+    /* ───────────── פתרונות ויזואליים ───────────── */
+    function renderVisualExplanation() {
+        // כפל
+        if (id == 3) {
+            let first  = Number(question.first);
+            let second = Number(question.second);
+            if (second < first) [first, second] = [second, first];
+
+            const rows = Array.from({ length: second }, (_, r) => (
+                <View key={r} style={{ flexDirection: "row" }}>
+                    {Array.from({ length: first }, (_, c) => (
+                        <View key={c} style={exercisePageStyles.ball} />
+                    ))}
+                </View>
+            ));
+
+            return (
+                <Animated.View style={[exercisePageStyles.explanation, { opacity: fadeAnim }]}>
+                    <Text style={exercisePageStyles.explanationText}>
+                        {second} קבוצות של {first} כדורים:
+                    </Text>
+                    <View style={{ alignItems: "center", marginVertical: 8 }}>{rows}</View>
+                </Animated.View>
+            );
+        }
+
+        // חילוק
+        if (id == 4) {
+            const dividend = Number(question.first);
+            const divisor  = Number(question.second);
+            const quotient = dividend / divisor;
+            if (dividend <= 20 && divisor > 0 && Number.isInteger(quotient))
+                return (
+                    <Animated.View style={[exercisePageStyles.explanation, { opacity: fadeAnim }]}>
+                        <Text style={exercisePageStyles.explanationText}>
+                            {dividend} כדורים מחולקים ל-{divisor} ילדים
+                        </Text>
+                        <SolutionVisualization firstNum={dividend} secondNum={divisor} operation="div" />
+                        <Text style={exercisePageStyles.explanationText}>
+                            כל אחד מקבל {quotient}
+                        </Text>
+                    </Animated.View>
+                );
+        }
+
+        // חיבור / חיסור
+        const opWord = id == 1 ? "נוסיף" : "נחסיר";
+        return (
+            <Animated.View style={[exercisePageStyles.explanation, { opacity: fadeAnim }]}>
+                <Text style={exercisePageStyles.explanationText}>
+                    נניח שיש {question.first} כדורים, {opWord} {question.second}
+                </Text>
+                <SolutionVisualization
+                    firstNum={Number(question.first)}
+                    secondNum={Number(question.second)}
+                    operation={id == 1 ? "add" : "sub"}
+                />
+            </Animated.View>
+        );
+    }
+
+    function renderVerticalSolution() {
+        const sign   = convertSign(question.operationSign);
+        const first  = Number(question.first);
+        const second = Number(question.second);
+        const result = eval(`${first}${sign}${second}`);
+        return (
+            <Animated.View style={[exercisePageStyles.explanation, { opacity: fadeAnim }]}>
+                <Text style={exercisePageStyles.explanationText}>פתרון במאונך:</Text>
+                <Text style={[exercisePageStyles.explanationText, { fontFamily: "monospace" }]}>{`
+   ${first}
+${sign}  ${second}
+---------
+   ${result}`}</Text>
+            </Animated.View>
+        );
+    }
+
     /* ───────────── רנדר ראשי ───────────── */
-    if (!id || !question)
-        return <Text style={exercisePageStyles.loading}>טוען...</Text>;
+    if (!id || !question) return <Text style={exercisePageStyles.loading}>טוען...</Text>;
 
     /* האם מדובר בשבר? */
-    const isFraction         = typeof question.first === "string" && question.first.includes("/");
-    const displayAnswers     = isFraction
+    const isFraction     = typeof question.first === "string" && question.first.includes("/");
+    const displayAnswers = isFraction
         ? question.answers.map(encoded => `${Math.floor(encoded / 1000)}/${encoded % 1000}`)
         : question.answers;
 
@@ -264,7 +332,7 @@ export default function StyledCoursePage() {
             <ScrollView contentContainerStyle={exercisePageStyles.container}
                         style={{ backgroundColor: Colors.background }}>
 
-                {/* --- שאלה למעלה --- */}
+                {/* --- שאלת כותרת --- */}
                 <LinearGradient
                     colors={[Colors.primary, Colors.accent]}
                     start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }}
@@ -272,30 +340,30 @@ export default function StyledCoursePage() {
 
                     <View style={{ alignItems: "center", marginBottom: 20 }}>
                         <View style={{ flexDirection: "row", alignItems: "center" }}>
-                            {isFraction && (question.first.includes("/") || question.second.includes("/"))
-                                ? (
-                                    <>
-                                        {question.first.includes("/") ? (
-                                            <FractionInQuestionTitle
-                                                numerator={question.first.split("/")[0]}
-                                                denominator={question.first.split("/")[1]}
-                                            />
-                                        ) : (
-                                            <Text style={exercisePageStyles.title}>{question.first}</Text>
-                                        )}
-                                        <Text style={exercisePageStyles.title}>{convertSign(question.operationSign)}</Text>
-                                        {question.second.includes("/") ? (
-                                            <FractionInQuestionTitle
-                                                numerator={question.second.split("/")[0]}
-                                                denominator={question.second.split("/")[1]}
-                                            />
-                                        ) : (
-                                            <Text style={exercisePageStyles.title}>{question.second}</Text>
-                                        )}
-                                        <Text style={exercisePageStyles.title}>= ?</Text>
-                                    </>
-                                )
-                                : <Text style={exercisePageStyles.title}>{question.text}</Text>}
+                            {isFraction && (question.first.includes("/") || question.second.includes("/")) ? (
+                                <>
+                                    {question.first.includes("/") ? (
+                                        <FractionInQuestionTitle
+                                            numerator={question.first.split("/")[0]}
+                                            denominator={question.first.split("/")[1]}
+                                        />
+                                    ) : (
+                                        <Text style={exercisePageStyles.title}>{question.first}</Text>
+                                    )}
+                                    <Text style={exercisePageStyles.title}>{convertSign(question.operationSign)}</Text>
+                                    {question.second.includes("/") ? (
+                                        <FractionInQuestionTitle
+                                            numerator={question.second.split("/")[0]}
+                                            denominator={question.second.split("/")[1]}
+                                        />
+                                    ) : (
+                                        <Text style={exercisePageStyles.title}>{question.second}</Text>
+                                    )}
+                                    <Text style={exercisePageStyles.title}>= ?</Text>
+                                </>
+                            ) : (
+                                <Text style={exercisePageStyles.title}>{question.text}</Text>
+                            )}
                         </View>
                     </View>
                 </LinearGradient>
@@ -360,9 +428,8 @@ export default function StyledCoursePage() {
 
                 {/* כפתור “איך פותרים” */}
                 {detailedSolutions && isAddOrSubOrSmallMulOrDiv && (
-                    <Pressable
-                        onPress={() => showResult && setShowSolution(!showSolution)}
-                        style={exercisePageStyles.helpButton}>
+                    <Pressable onPress={() => showResult && setShowSolution(!showSolution)}
+                               style={exercisePageStyles.helpButton}>
                         <Text style={{
                             color: showResult ? "#A47DAB" : "gray",
                             fontWeight: showResult ? "bold" : "normal",
@@ -374,7 +441,10 @@ export default function StyledCoursePage() {
                     </Pressable>
                 )}
 
-                {/* TODO: renderVisualExplanation / renderVerticalSolution – נשארו כפי שהיו אצלך */}
+                {/* הצגת הפתרון עצמו */}
+                {showSolution && showResult && (
+                    isVisual ? renderVisualExplanation() : renderVerticalSolution()
+                )}
 
                 {showConfetti && <ConfettiCannon count={100} origin={{ x: 200, y: 0 }} fadeOut />}
                 {showSuccessIcon && (
