@@ -52,11 +52,11 @@ export default function StyledCoursePage() {
     const [detailedSolutions, setDetailedSolutions] = useState(true);
     const [answerFeedbackColor, setAnswerFeedbackColor] = useState(null);
 
-    /* --- אנימציות --- */
+
     const fadeAnim    = useRef(new Animated.Value(0)).current;
     const successAnim = useRef(new Animated.Value(0)).current;
 
-    /* ───────────── useEffect ראשי ───────────── */
+
     useEffect(() => {
         if (!id) return;
         if (id === "random") fetchRandomQuestion();
@@ -66,7 +66,6 @@ export default function StyledCoursePage() {
         }
     }, [id]);
 
-    /* fade-in / fade-out לפתרון החזותי */
     useEffect(() => {
         if (showSolution)
             Animated.timing(fadeAnim, { toValue: 1, duration: 700, useNativeDriver: true }).start();
@@ -82,7 +81,7 @@ export default function StyledCoursePage() {
         );
     }, []);
 
-    /* ───────────── קריאות API ───────────── */
+    /*שליפת הרמה של המשתמש בנושא */
     async function fetchTopicLevel(topicId) {
         try {
             const res   = await api.get("/api/user/topics-levels");
@@ -92,6 +91,8 @@ export default function StyledCoursePage() {
             console.log("Error fetchTopicLevel:", err);
         }
     }
+
+    /*שליפת השאלה הבאה  */
 
     async function fetchNextQuestion(topicId) {
         try {
@@ -140,7 +141,7 @@ export default function StyledCoursePage() {
         }
     }
 
-    /* ───────────── בדיקת תשובה ───────────── */
+    /*בדיקת תשובה*/
     async function handleCheckAnswer() {
         if (selectedAnswer === null) { alert("יש לבחור תשובה תחילה."); return; }
         if (isCheckDisabled) return;
@@ -200,7 +201,7 @@ export default function StyledCoursePage() {
         }
     }
 
-    /* ───────────── עזרי תצוגה ───────────── */
+    /*סימני חישוב*/
     const convertSign = sign => ({ "+": "+", "-": "-", "×": "×", "÷": "÷" }[sign] ?? sign);
 
     const decodeFraction = encoded => {
@@ -228,7 +229,7 @@ export default function StyledCoursePage() {
         ]).start(() => setShowSuccessIcon(false));
     }
 
-    /* ───────────── פתרונות ויזואליים ───────────── */
+    /* פתרונות ויזואליים  */
     function renderVisualExplanation() {
         // כפל
         if (id == 3) {
@@ -250,6 +251,10 @@ export default function StyledCoursePage() {
                         {second} קבוצות של {first} כדורים:
                     </Text>
                     <View style={{ alignItems: "center", marginVertical: 8 }}>{rows}</View>
+
+                    <Text style={exercisePageStyles.explanationText}>
+                        בכל טור יש {second} כדורים, ויש {first} טורים. ביחד זה {first * second} כדורים.
+                    </Text>
                 </Animated.View>
             );
         }

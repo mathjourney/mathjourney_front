@@ -673,6 +673,7 @@ const dashboardStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
     },
+
     achievementsDescription: {
         fontSize: 14,
         color: Colors.darkGray,
@@ -1202,6 +1203,17 @@ const exercisePageStyles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    ball: {
+        width: 22,          // קוטר
+        height: 22,
+        borderRadius: 11,   // עיגול
+        backgroundColor: "#FFB74D",
+        margin: 3,
+        borderWidth: 1,
+        borderColor: "#E0913E"
+    },
+
+    /* explanation container */
 
     title: {
         fontSize: 24,
