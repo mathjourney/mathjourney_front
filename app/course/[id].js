@@ -214,11 +214,53 @@ export default function StyledCoursePage() {
 
     function generateQuestionText(first, second, sign) {
         const op = convertSign(sign);
-        const generic = [
+
+        const names = ["נועה", "מיטל", "תמר", "הדס", "נעמה"];
+        const items = ["תפוחים", "בננות", "עפרונות", "כדורים", "ספרים", "צעצועים"];
+        const name = names[Math.floor(Math.random() * names.length)];
+        const item = items[Math.floor(Math.random() * items.length)];
+
+        const verbalTemplates = {
+            '+': [
+                `${name} קיבלה ${first} ${item}, ואז הוסיפו לה עוד ${second}. כמה ${item} יש לה עכשיו?`,
+                `${name} אספה ${first} ${item} ועוד ${second}. כמה יש לה בסך הכל?`,
+                `${name} קיבלה ${first} ${item} ואז קיבלה מחבר עוד ${second}. כמה ${item} יש לה עכשיו?`,
+                `${name} קיבלה ${first} ${item}, ועכשיו הוסיפו לה ${second} נוספים. כמה יש לה?`
+            ],
+            '-': [
+                `${name} קיבלה ${first} ${item}, אבל איבדה ${second}. כמה ${item} נשארו לה?`,
+                `${name} התחילה עם ${first} ${item} ונתנה לחבר ${second}. כמה נשארו לה?`,
+                `${name} קיבלה ${first} ${item}, אך איבדה ${second}. כמה ${item} נשארו לה?`,
+                `${name} התחילה עם ${first} ${item} ונתנה ${second} לאחרים. כמה נשארו לה?`,
+            ],
+            '×': [
+                `${name} קיבלה ${second} שקיות, ובכל שקית יש ${first} ${item}. כמה ${item} יש לה בסך הכל?`,
+                `${name} ארזה ${second} קופסאות, ובכל קופסה יש ${first} ${item}. כמה ${item} יש לה בסך הכל?`,
+                `ל${name} יש ${second} תיקים, ובכל תיק ${first} ${item}. כמה ${item} יש לה בסך הכל?`,
+                `${name} הכינה ${second} מגשים, ובכל מגש ${first} ${item}. כמה ${item} יש לה בסך הכל?`,
+            ],
+            '÷': [
+                `${name} חילקה ${first} ${item} שווה בשווה ל-${second} ילדים. כמה קיבל כל ילד?`,
+                `${first} ${item} חולקו ל-${second} קבוצות שוות. כמה יש בכל קבוצה?`,
+                `${first} ${item} חולקו באופן שווה בין ${second} ילדים. כמה קיבל כל אחד?`,
+                `${first} ${item} חולקו בין ${second} ילדים. כמה קיבל כל אחד?`,
+                `כמה ${item} יש לכל ילד אם חילקו ${first} ${item} ל-${second} ילדים?`
+            ],
+        };
+
+        const genericTemplates = [
             `כמה זה ${second} ${op} ${first}?`,
-            `${second} ${op} ${first} שווה ל...?`
+            `${second} ${op} ${first} שווה ל...?`,
+            `בוא נחשב: ${second} ${op} ${first}`,
+            `מה התוצאה של ${second} ${op} ${first}?`,
         ];
-        return generic[Math.floor(Math.random() * generic.length)];
+
+        const allOptions = [
+            ...(verbalTemplates[op] || []),
+            ...genericTemplates
+        ];
+
+        return allOptions[Math.floor(Math.random() * allOptions.length)];
     }
 
     function triggerSuccessAnimation() {

@@ -96,7 +96,7 @@ export default function Dashboard() {
     return (
 
         <ProtectedRoute requireAuth={true}>
-            <ScrollView>
+            <ScrollView contentContainerStyle={dashboardStyles.scrollContainer}>
             <View contentContainerStyle={dashboardStyles.scrollContainer}>
                 <View style={dashboardStyles.header}>
                     {/* לוגו מצד שמאל */}

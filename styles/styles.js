@@ -521,6 +521,7 @@ const achievementsStyles = StyleSheet.create({
 const dashboardStyles = StyleSheet.create({
     scrollContainer: {
         alignItems: 'center',
+        paddingBottom: 500,
         backgroundColor:Colors.background,
     },
     header: {
@@ -590,7 +591,7 @@ const dashboardStyles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 30,
         gap: wp(2),
-        minHeight: hp(70),
+        minHeight: hp(30),
     },
     iconCircle: {
         width: 48,
@@ -606,11 +607,11 @@ const dashboardStyles = StyleSheet.create({
         width: wp(40),
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: Colors.black,
         textAlign: 'center',
-        marginBottom: 16, // או יותר אם צריך
+        marginBottom: 5, // או יותר אם צריך
     },
     statisticsDescription: {
         fontSize: 14,
@@ -696,25 +697,20 @@ const dashboardStyles = StyleSheet.create({
     },
     mainCard: {
         width: width > 768 ? 709 : '96%',
-        alignSelf: 'flex-start',
-        alignContent: 'flex-start',
-        alignItems: 'flex-start',
+        alignSelf: 'center', // ✅ במקום flex-start
+        alignItems: 'center', // ✅ כדי ליישר גם תוכן פנימי
         borderRadius: 20,
         backgroundColor: Colors.white,
-        marginRight: 50,
-        height: hp(100)
+        marginTop: -15,
     },
+
     mainBCard: {
-        alignSelf: 'flex-start',
-        alignContent: 'flex-start',
-        alignItems: 'flex-start',
-        height: hp(100),
-        width: wp(40),
+        width: '100%', // ✅ שיתפוס את כל ה־mainCard
         padding: 24,
         borderRadius: 20,
         backgroundColor: Colors.white,
-        marginRight: 50,
     },
+
     imageStyle: {
         width: wp(40),
         height: hp(25),
@@ -725,15 +721,15 @@ const dashboardStyles = StyleSheet.create({
     greetingText: {
         marginTop:10,
         marginBottom:20,
-        marginRight:60,
-        marginLeft:60,
+        marginRight:150,
+        marginLeft:10,
         fontSize: 20,
         fontWeight: '600',
         color: Colors.secondary
     },
     emojiCircle: {
         backgroundColor: Colors.light,
-        marginLeft: wp(2),
+        marginLeft: -80,
         borderRadius: 100,
         width: 40,
         height: 40,
@@ -746,6 +742,7 @@ const dashboardStyles = StyleSheet.create({
     },
     emoji: {
         fontSize: 40,
+        marginLeft: -5,
 
     },
 
@@ -784,6 +781,7 @@ const dashboardStyles = StyleSheet.create({
         height:hp(7),
         width:wp(35),
         marginTop: 30,
+        marginBottom: 20,
         backgroundColor: Colors.primary,
         paddingVertical: 4,
         borderRadius: 100,
