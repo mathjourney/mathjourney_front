@@ -599,7 +599,7 @@ const dashboardStyles = StyleSheet.create({
         backgroundColor: Colors.light,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 12,
+        marginBottom: 3,
     },
     titleWrapper: {
         height: hp(9),
@@ -663,7 +663,7 @@ const dashboardStyles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 24,
-        marginTop: 8,
+        marginTop: -3,
         alignSelf: 'stretch',
         alignItems: 'center',
     },
@@ -673,6 +673,7 @@ const dashboardStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
     },
+
     achievementsDescription: {
         fontSize: 14,
         color: Colors.darkGray,
@@ -1202,6 +1203,17 @@ const exercisePageStyles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    ball: {
+        width: 22,          // קוטר
+        height: 22,
+        borderRadius: 11,   // עיגול
+        backgroundColor: "#FFB74D",
+        margin: 3,
+        borderWidth: 1,
+        borderColor: "#E0913E"
+    },
+
+    /* explanation container */
 
     title: {
         fontSize: 24,
