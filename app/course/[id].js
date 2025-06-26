@@ -111,7 +111,7 @@ export default function StyledCoursePage() {
             questionData.text = generateQuestionText(
                 questionData.first,
                 questionData.second,
-                questionData.operationSign,
+                convertSign(questionData.operationSign),
                 myTopicLevel
             );
 
@@ -151,7 +151,7 @@ export default function StyledCoursePage() {
                 questionData.text = generateQuestionText(
                     questionData.first,
                     questionData.second,
-                    questionData.operationSign,
+                    convertSign(questionData.operationSign),
                     myTopicLevel
                 );
             }
