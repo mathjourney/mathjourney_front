@@ -69,6 +69,7 @@ export default function Login() {
             if (data.success && data.token) {
 
                 await storage.set('userToken', data.token);
+                alert('התחברת בהצלחה!');
                 setMail('');
                 setPassword('');
                 router.replace('(tabs)/Dashboard');
