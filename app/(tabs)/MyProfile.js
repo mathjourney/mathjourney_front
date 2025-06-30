@@ -165,9 +165,9 @@ export default function MyProfile() {
                         </View>
                         <View style={{ alignSelf: "center" }}>
                             <Text style={myProfileStyles.name}>{name}</Text>
-                            <View style={{ flexDirection: "row-reverse" }}>
+                            <View style={{ alignItems: 'center' }}>
                                 <Text style={myProfileStyles.subText}>
-                                    {role} <Text style={{ fontSize: 20 }}>•</Text> רמה {level}
+                                    {role}
                                 </Text>
                             </View>
                         </View>
